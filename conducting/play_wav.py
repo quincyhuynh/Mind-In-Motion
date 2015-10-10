@@ -2,29 +2,46 @@ import pyaudio
 import wave
 import sys
 
-CHUNK = 1024
+class song: 
+    CHUNK = 1024
+    rate = 0
+    
+    def __init__(self, current_song):
+        self.cur_song = current_song
+        self.pyaudio_object = pyaudio.PyAudio()
+        self.wave_file = wave.open(current_song)
+        self.rate = self.wave_file.getframerate()
+        
+        self.stream = self.pyaudio_object.open(format=self.pyaudio_object.get_format_from_width(self.wave_file.getsampwidth()),
+                        channels=self.wave_file.getnchannels(), 
+                        rate=self.rate,
+                        output=True)
+        self.pos = self.wave_file.tell()
 
-if len(sys.argv) < 2:
-    print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0])
-    sys.exit(-1)
+    def play(self, action, pause, stop): 
+        if action: 
+            return
 
-wf = wave.open(sys.argv[1], 'rb')
+        self.rate = wave_file.getframerate()
+        data = self.wave_file.readframes(CHUNK)
+        self.wave_file.setpos(self.pos)
+        while data != '' and not pause and not stop: 
+            self.stream.write(data)
+            data = self.wave_file.readframes(CHUNK)
+        if pause: 
+            self.pos = self.wave_file.tell()
+            return 
+        elif stop: 
+            self.wave_file.rewind()
+            self.pos = self.wave_file.tell()
+            return
+        end(self)
 
-p = pyaudio.PyAudio()
-
-stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                channels=wf.getnchannels(),
-                rate=wf.getframerate(),
-                output=True)
-
-data = wf.readframes(CHUNK)
-
-while data != '':
-    stream.write(data)
-    data = wf.readframes(CHUNK)
+    def end(self): 
+        self.stream.stop_stream()
+        self.stream.close()
 
 
-stream.stop_stream()
-stream.close()
 
-p.terminate()
+
+
