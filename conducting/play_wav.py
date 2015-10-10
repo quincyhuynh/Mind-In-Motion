@@ -18,16 +18,13 @@ class song:
                         output=True)
         self.pos = self.wave_file.tell()
 
-    def play(self, action, pause, stop): 
-        if action: 
-            return
-
-        self.rate = wave_file.getframerate()
-        data = self.wave_file.readframes(CHUNK)
+    def play(self, pause, stop): 
+        self.rate = self.wave_file.getframerate()
+        data = self.wave_file.readframes(self.CHUNK)
         self.wave_file.setpos(self.pos)
         while data != '' and not pause and not stop: 
             self.stream.write(data)
-            data = self.wave_file.readframes(CHUNK)
+            data = self.wave_file.readframes(self.CHUNK)
         if pause: 
             self.pos = self.wave_file.tell()
             return 
@@ -40,6 +37,11 @@ class song:
     def end(self): 
         self.stream.stop_stream()
         self.stream.close()
+
+song1 = song(r"19.December, 1963 (Oh, What A Night).wav")
+for x in range(0, 10000):
+    song1.play(0, 0, 0)
+song1.play(1, 0, 0)
 
 
 
