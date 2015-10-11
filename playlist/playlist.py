@@ -1,4 +1,4 @@
-import os, sys, inspect, thread, time, play_wav, io, glob
+import os, sys, inspect, thread, time, play_wav, io, glob, getpass
 sys.path.append("../lib")
 sys.path.append("../lib/x64")
 
@@ -32,28 +32,12 @@ class playlist_listener(Leap.Listener):
 				return False
 		return True
 
-# class conductor_controller(Leap.Controller):
-# 	def __init__(self, conductor_listener_trainer):
-# 		super
-
-# def create_training_set_play():
-# 	listener = conductor_listener_trainer()
-# 	controller = Leap.Controller()
-
-# 	# Have the sample listener receive events from the controller
-# 	controller.add_listener(listener)
-# 	new_song = play_wav.song(sys.argv[1], listener, controller)
-
-# 	new_song.play()
-# 	controller.remove_listener(listener)
-
 
 def main():
 	listener = playlist_listener()
 	controller = Leap.Controller()
 
 	controller.add_listener(listener)
-	
 	new_session = session(listener, controller)
 	new_session.login()
 	new_session.play_track()
