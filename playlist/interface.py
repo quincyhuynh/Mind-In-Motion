@@ -69,7 +69,7 @@ class Example(Frame):
         user = makeentry(root, "Username: ", 10)
         password = makeentry(root, "Password: ", 10, show="*")
         b = Button(root, text="Submit", width=10)
-        b.place(x=110, y=238)
+        b.place(x=210, y=538)
 
 
 
@@ -77,7 +77,7 @@ class Example(Frame):
 
 
 
-        img = ImageTk.PhotoImage(PIL.Image.open("thecircle.png"))
+        img = ImageTk.PhotoImage(PIL.Image.open("cccircles.png"))
         # img = img.resize((250, 250), Image.ANTIALIAS)
         # self.pw.pic = ImageTk.PhotoImage(img)
         panel = Label(root, image = img)
