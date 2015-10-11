@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import os, sys, inspect, thread, time, play_wav, io, glob, getpass
+=======
+import os, sys, inspect, thread, time, play_wav, io, glob, spotify_session
+>>>>>>> 9ecaaec70a1ad055579dd2ca4f30d864f6c9c9dd
 sys.path.append("../lib")
 sys.path.append("../lib/x64")
 
@@ -38,11 +42,16 @@ def main():
 	controller = Leap.Controller()
 
 	controller.add_listener(listener)
+<<<<<<< HEAD
 	new_session = session(listener, controller)
+=======
+
+	new_session = spotify_session.session(listener, controller)
+>>>>>>> 9ecaaec70a1ad055579dd2ca4f30d864f6c9c9dd
 	new_session.login()
 	new_session.play_track()
 
-	controller.remove_listenier(listener)
+	controller.remove_listener(listener)
 
 if __name__ == "__main__":
 	main()
