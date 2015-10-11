@@ -35,3 +35,4 @@ class session():
 			action = self.listener.get_frame(self.controller)
 		print "stop"
 		self.session.player.unload()
+
