@@ -1,12 +1,10 @@
 import os, sys, inspect, thread, time, play_wav, io, glob
-# src_dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
-# lib_dir = os.path.abspath(os.path.join(src_dir, '../lib'))
 sys.path.append("../lib")
 sys.path.append("../lib/x64")
 
 import Leap
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
-class playlist_listener_trainer(Leap.Listener):
+class playlist_listener(Leap.Listener):
 	def on_connect(self, controller):
 		print "Connected"
 		controller.enable_gesture(Leap.Gesture.TYPE_SWIPE);
@@ -51,26 +49,16 @@ class playlist_listener_trainer(Leap.Listener):
 
 
 def main():
-	# Create a sample listener and controller
-	listener = playlist_listener_trainer()
+	listener = playlist_listener()
 	controller = Leap.Controller()
-	songs = glob.glob("*.wav")
 
-	# # Have the sample listener receive events from the controller
 	controller.add_listener(listener)
-	new_song = play_wav.song(songs, listener, controller)
+	
+	new_session = session(listener, controller)
+	new_session.login()
+	new_session.play_track()
 
-	new_song.play()
-	# Keep this process running until Enter is pressed
-	# print "Press Enter to quit..."
-	# try:
-
-	# 	sys.stdin.readline()
-	# except KeyboardInterrupt:
-	# 	pass
-	# finally:
-	# 	# Remove the sample listener when done
-	controller.remove_listener(listener)
+	controller.remove_listenier(listener)
 
 if __name__ == "__main__":
 	main()

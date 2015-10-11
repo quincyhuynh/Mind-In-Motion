@@ -5,7 +5,9 @@
 # https://developer.leapmotion.com/sdk_agreement, or another agreement         #
 # between Leap Motion and you, your company or other organization.             #
 ################################################################################
-
+import os, sys, inspect, thread, time, play_wav, io, glob
+sys.path.append("../lib")
+sys.path.append("../lib/x64")
 import Leap, sys, thread, time
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 
@@ -131,6 +133,8 @@ class SampleListener(Leap.Listener):
 
         if not (frame.hands.is_empty and frame.gestures().is_empty):
             print ""
+
+        time.sleep(0.1)
 
     def state_string(self, state):
         if state == Leap.Gesture.STATE_START:

@@ -10,10 +10,11 @@ class song:
     
     def __init__(self, songs, listener, controller):
         self.songs = songs
-        self.cur_song = songs[0]
-        print self.cur_song
+        self.curr_song = songs[0]
+        print songs
+        print self.curr_song
         self.pyaudio_object = pyaudio.PyAudio()
-        self.wave_file = wave.open(self.cur_song)
+        self.wave_file = wave.open(self.curr_song)
         self.rate = self.wave_file.getframerate()
         self.listener, self. controller = listener, controller
         self.stream = self.pyaudio_object.open(format=self.pyaudio_object.get_format_from_width(self.wave_file.getsampwidth()),
@@ -23,9 +24,11 @@ class song:
         self.pos = self.wave_file.tell()
 
     def shuffle(self):
-        self.cur_song = random.choice(self.songs)
-        print self.cur_song
-        self.wave_file = wave.open(self.cur_song)
+        next_song = random.choice(self.songs)
+        print next_song
+        if next_song == curr_song:
+            self.shuffle()
+        self.wave_file = wave.open(self.curr_song)
         self.rate = self.wave_file.getframerate()
         self.stream = self.pyaudio_object.open(format=self.pyaudio_object.get_format_from_width(self.wave_file.getsampwidth()),
                         channels=self.wave_file.getnchannels(), 
@@ -67,6 +70,7 @@ class song:
                     data = self.wave_file.readframes(self.CHUNK) 
                 elif not play:
                     self.pos = self.wave_file.tell()
+        self.shuffle()
         self.play()
 
     def end(self): 
