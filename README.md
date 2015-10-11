@@ -14,3 +14,4 @@ Standard Rules:
 -Changing mode to shuffle will create a new shuffled playlist, and the next song to be played will be the first of that shuffled playlist. Changing mode from Sequential to Shufle will a similar thing  (modeled after iTunes)
 -Changing playlists will cycle through your playlists and if the last playlist is reached, it will cycle back to the first one the next time next playlist is called.
 -When the last song  of the current playlist (or very first if calling previous song), the program will halt and wait for input after the song finished playing
+
