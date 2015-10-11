@@ -15,12 +15,13 @@ class Example(Frame):
         Frame.__init__(self, parent)   
         self.screen_size = screen_size
         self.parent = parent
-        # self.parent.title("Centered window")
         self.pack(fill=BOTH, expand=1)
         # self.centerWindow()
+
         self.initUI()
         self.logIn()
         
+
 
     def logIn(self):
 
@@ -28,64 +29,95 @@ class Example(Frame):
     	e = Entry(self.parent)
     	e.pack()
 
-    	e.focus_set()
-
-    	Label(self.parent, text = "Password").pack()
-    	d = Entry(self.parent)
-    	d.pack()
-    	
-    	d.focus_set()
-
-    	# if TRUE:
-    	# 	return true
-    	# else:
-    	# 	print('login error')
-    	# 	return logIn()
+    #     def callback():
+    #         print e.get()
+    #         print d.get()
 
 
+    #     b = Button(master, text="Submit", width=10, command = callback)
+    #     b.pack()
+
+    #     # master.mainloop()
+
+    #     e = Entry(master, width=50)
+    #     e.pack()
+
+    #     text = e.get()
+
+    #     def makeentry(parent, caption, width=None, **options):
+    #         Label(parent, text=caption).pack(side=LEFT)
+    #         entry = Entry(parent, **options)
+    #         if width:
+    #             entry.config(width=width)
+    #         entry.pack(side=LEFT)
+    #         return entry
 
 
 
-    	def callback():
-    		print e.get()
-    		print d.get()
-
-
-    	b = Button(self.parent, text="Submit", width=10, command = callback)
-    	b.place(x = 300, y = 300)
-        b.pack()
-
-
-    	self.parent.mainloop()
-
-    	e = Entry(parent, width=50)
-    	e.pack()
-
-    	text = e.get()
-
-    	def makeentry(parent, caption, width=None, **options):
-    		Label(parent, text=caption).pack(side=LEFT)
-    		entry = Entry(parent, **options)
-    		if width:
-    			entry.config(width=width)
-    		entry.pack(side=LEFT)
-    		return entry
-
-    	user = makeentry(self.parent, "Username: ", 10)
-    	password = makeentry(self.parent, "Password: ", 10, show="*")
-
-    	content = StringVar()
-    	entry = Entry(parent, text=caption, textvariable=content)
-    	text = content.get()
-    	content.set(text)
 
 
 
     def initUI(self):
-        root = Tk()
-        text = Text(root)
+        # root = Tk()
+        # text = Text(root)
+        root = self.parent
+        root.title("Music In Motion")
 
-        self.parent.title("Music In Motion")
+
+
+        # Label(root, text = "User: ").pack()
+        # e = Entry(root)
+        # e.pack()
+
+        # e.focus_set()
+
+        # Label(root, text = "Password").pack()
+        # d = Entry(root)
+        # d.pack()
+        
+        # d.focus_set()
+
+
+        def makeentry(parent, caption, width=None, **options):
+            Label(root, text=caption).pack(side=LEFT)
+            entry = Entry(root, **options)
+            if width:
+                entry.config(width=width)
+            entry.pack(side=LEFT)
+            return entry        
+
+        def callback():
+            print e.get()
+            print d.get()
+
+
+       
+
+        # master.mainloop()
+
+        # def makeentry(parent, caption, width=None, **options):
+        #     Label(root, text=caption).pack(side=LEFT)
+        #     entry = Entry(root, **options)
+        #     if width:
+        #         entry.config(width=width)
+        #     entry.pack(side=LEFT)
+        #     return entry
+
+        user = makeentry(root, "Username: ", 10)
+        password = makeentry(root, "Password: ", 10, show="*")
+        b = Button(root, text="Submit", width=10)
+        b.place(x=100, y=380)
+
+        # content = StringVar()
+        # entry = makeentry(root, text=caption, textvariable=content)
+        # text = content.get()
+        # content.set(text)
+
+
+
+
+
+
 
 
         # img = ImageTk.PhotoImage(Image.open(""))

@@ -51,7 +51,7 @@ class session():
 			return
 		self.playlists = self.session.playlist_container
 		self.playlists.load()
-		self.playlist_length = len(self.playlists)
+		self.playlists_length = len(self.playlists)
 		self.playlist = self.playlists[1]
 		self.playlist.load()
 		print "Current Playlist:", self.playlist.name
@@ -65,7 +65,7 @@ class session():
 		self.playlist_length = len(self.playlist.tracks)
 		self.session.player.unload()
 		curr_index = self.playlists.index(self.playlist)
-		if curr_index < self.playlist_length - 1:
+		if curr_index < self.playlists_length - 1:
 			self.playlist = self.playlists[curr_index+1]
 		else:
 			self.playlist = self.playlists[0]
