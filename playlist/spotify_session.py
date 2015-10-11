@@ -18,12 +18,17 @@ class session():
 		self.track = None
 		self.shuffle_mode = False 
 		self.playlist_length = 0
+		self.playlists_length = 0
 
 	def login(self):
-		# username = raw_input("Username: ")
-		# password = getpass.getpass("Password: ")
-		username = "quinceftw"
-		password = "thisisnotmypasswordlol"
+		username = ""
+		password = ""
+		# login_credentials a 2 line txt file
+		with open("login_credentials.txt", "r") as f:
+			username = f.readline()
+			username = username.replace("\n", "")
+			password = f.readline()
+			password = password.replace("\n", "")
 		print "Logging in..."
 		self.session.login(username, password)
 		timeout = 20000000
@@ -46,7 +51,8 @@ class session():
 			return
 		self.playlists = self.session.playlist_container
 		self.playlists.load()
-		self.playlist = self.playlists[0]
+		self.playlist_length = len(self.playlists)
+		self.playlist = self.playlists[1]
 		self.playlist.load()
 		print "Current Playlist:", self.playlist.name
 		self.playlist_length = len(self.playlist.tracks)
@@ -59,10 +65,14 @@ class session():
 		self.playlist_length = len(self.playlist.tracks)
 		self.session.player.unload()
 		curr_index = self.playlists.index(self.playlist)
-		if curr_index < len(self.playlists) - 1:
+		if curr_index < self.playlist_length - 1:
 			self.playlist = self.playlists[curr_index+1]
 		else:
 			self.playlist = self.playlists[0]
+		if self.shuffle_mode:
+			copy = self.playlist.tracks[:]
+			random.shuffle(copy)
+			self.shuffledlist = copy
 		self.playlist.load()
 		print "Current Playlist:", self.playlist.name
 		self.track = self.playlist.tracks[0]
@@ -76,10 +86,14 @@ class session():
 		self.playlist_length = len(self.playlist.tracks)
 		self.session.player.unload()
 		curr_index = self.playlists.index(self.playlist)
-		if curr_index < len(self.playlists) - 1:
-			self.playlist = self.playlists[curr_index+1]
+		if curr_index < self.playlist_length - 1:
+			self.playlist = self.playlists[curr_index-1]
 		else:
 			self.playlist = self.playlists[0]
+		if self.shuffle_mode:
+			copy = self.playlist.tracks[:]
+			random.shuffle(copy)
+			self.shuffledlist = copy
 		self.playlist.load()
 		print "Current Playlist:", self.playlist.name
 		self.track = self.playlist.tracks[0]
@@ -154,10 +168,9 @@ class session():
 		self.session.player.load(self.track)
 		action = self.listener.get_frame(self.controller)
 		play = False
-		while action != "stop":
-			if action == "mode change":
-				time.sleep(0.5)
-				self.mode_change()
+		while action != "lol":
+			# if action:
+			# 	print action
 			if action == "play/pause":
 				time.sleep(0.5)
 				play = not play
@@ -179,15 +192,18 @@ class session():
 				self.previous()
 				play = True
 			if action == "next playlist":
-				time.sleep(0.4)
+				time.sleep(1)
 				self.next_playlist()
 				play = True
 			if action == "prev playlist":
-				time.sleep(0.4)
+				time.sleep(1)
 				self.prev_playlist()
 				play = True
+			if action == "mode change":
+				time.sleep(1)
+				self.mode_change()
 			action = self.listener.get_frame(self.controller)
-			time.sleep(0.5)
+			time.sleep(0.1)
 		print "stop"
 		self.session.player.unload()
 

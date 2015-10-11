@@ -17,10 +17,6 @@ class playlist_listener(Leap.Listener):
 		types = [i.type for i in gestures]
 		if len(frame.hands) == 0:
 			return None
-		# hand = frame.hands[0]
-		# speed = hand.palm_velocity.magnitude
-		if Leap.Gesture.TYPE_SWIPE in types:
-			return "swipe"
  		if Leap.Gesture.TYPE_CIRCLE in types:
  			for gesture in gestures:
  				circle = Leap.CircleGesture(gesture)
@@ -32,15 +28,17 @@ class playlist_listener(Leap.Listener):
 			return "stop"
 		if len(frame.hands) == 1:
 			hand = frame.hands[0]
+			speed = hand.palm_velocity.magnitude
 			num_fingers = len(frame.fingers.extended())
-			if num_fingers == 0:
-				return "play/pause"
-			if num_fingers == 2:
-				return "prev playlist"
-			if num_fingers == 3:
-				return "next playlist"
-			if num_fingers == 5:
-				return "mode change"
+			if speed < 200:
+				if num_fingers == 0:
+					return "play/pause"
+				if num_fingers == 2:
+					return "prev playlist"
+				if num_fingers == 3:
+					return "next playlist"
+				if num_fingers == 5:
+					return "mode change"
 		time.sleep(0.1)
 
 
