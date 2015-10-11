@@ -2,6 +2,7 @@ import spotify
 import time
 import random
 import sys
+import getpass
 
 class session():
 	def __init__(self, listener, controller):
@@ -11,8 +12,10 @@ class session():
 		self.loop = spotify.EventLoop(self.session)
 		self.track = self.session.get_track('spotify:track:5nNmj1cLH3r4aA4XDJ2bgY')
 	def login(self):
+                username = raw_input("Username: ")
+                password = getpass.getpass("Password: ")
 		print "Logging in..."
-		self.session.login('quinceftw', 'thisisnotmypasswordlol')
+		self.session.login(username, password)
 		while self.session.connection.state is not spotify.ConnectionState.LOGGED_IN:
 			self.session.process_events()
 		print "Connected"
