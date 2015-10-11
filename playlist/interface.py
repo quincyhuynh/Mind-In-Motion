@@ -18,20 +18,20 @@ class Example(Frame):
         # self.parent.title("Centered window")
         self.pack(fill=BOTH, expand=1)
         # self.centerWindow()
-        self.logIn()
         self.initUI()
+        self.logIn()
+        
 
     def logIn(self):
-    	master = Tk()
 
-    	Label(master, text = "User: ").pack()
-    	e = Entry(master)
+    	Label(self.parent, text = "User: ").pack()
+    	e = Entry(self.parent)
     	e.pack()
 
     	e.focus_set()
 
-    	Label(master, text = "Password").pack()
-    	d = Entry(master)
+    	Label(self.parent, text = "Password").pack()
+    	d = Entry(self.parent)
     	d.pack()
     	
     	d.focus_set()
@@ -51,12 +51,14 @@ class Example(Frame):
     		print d.get()
 
 
-    	b = Button(master, text="Submit", width=10, command = callback)
-    	b.pack()
+    	b = Button(self.parent, text="Submit", width=10, command = callback)
+    	b.place(x = 300, y = 300)
+        b.pack()
 
-    	master.mainloop()
 
-    	e = Entry(master, width=50)
+    	self.parent.mainloop()
+
+    	e = Entry(parent, width=50)
     	e.pack()
 
     	text = e.get()
@@ -69,8 +71,8 @@ class Example(Frame):
     		entry.pack(side=LEFT)
     		return entry
 
-    	user = makeentry(parent, "Username: ", 10)
-    	password = makeentry(parent, "Password: ", 10, show="*")
+    	user = makeentry(self.parent, "Username: ", 10)
+    	password = makeentry(self.parent, "Password: ", 10, show="*")
 
     	content = StringVar()
     	entry = Entry(parent, text=caption, textvariable=content)

@@ -168,7 +168,7 @@ class session():
 		self.session.player.load(self.track)
 		action = self.listener.get_frame(self.controller)
 		play = False
-		while action != "lol":
+		while action != "stop":
 			# if action:
 			# 	print action
 			if action == "play/pause":

@@ -1,4 +1,4 @@
-import os, sys, inspect, thread, time, play_wav, io, glob, spotify_session
+import os, sys, inspect, thread, time, play_wav, io, glob, spotify_session, subprocess
 sys.path.append("../lib")
 sys.path.append("../lib/x64")
 
@@ -17,6 +17,8 @@ class playlist_listener(Leap.Listener):
 		types = [i.type for i in gestures]
 		if len(frame.hands) == 0:
 			return None
+		if len(frame.hands) == 2:
+			return "stop"
  		if Leap.Gesture.TYPE_CIRCLE in types:
  			for gesture in gestures:
  				circle = Leap.CircleGesture(gesture)
@@ -24,8 +26,6 @@ class playlist_listener(Leap.Listener):
 				    return "next"
 				else:
 				    return "prev"
-		if len(frame.hands) == 2:
-			return "stop"
 		if len(frame.hands) == 1:
 			hand = frame.hands[0]
 			speed = hand.palm_velocity.magnitude
@@ -59,6 +59,8 @@ def main():
 	new_session.load_initial()
 	new_session.play_track()
 
+
+	subprocess.call(["rm", "-rf", "./tmp/"])
 	controller.remove_listener(listener)
 
 if __name__ == "__main__":
