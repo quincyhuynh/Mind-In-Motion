@@ -10,9 +10,6 @@ class playlist_listener(Leap.Listener):
 		controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE);
 		controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP);
 		controller.enable_gesture(Leap.Gesture.TYPE_INVALID);
-		controller.config.set("Gesture.Swipe.MinLength", 60.0)
-		controller.config.set("Gesture.Swipe.MinVelocity", 250)
-		controller.config.save()
 
 	def get_frame(self, controller):
 		frame = controller.frame()
@@ -22,8 +19,8 @@ class playlist_listener(Leap.Listener):
 			return None
 		# hand = frame.hands[0]
 		# speed = hand.palm_velocity.magnitude
-		# if Leap.Gesture.TYPE_SWIPE in types:
-		# 	return "mode change"
+		if Leap.Gesture.TYPE_SWIPE in types:
+			return "swipe"
  		if Leap.Gesture.TYPE_CIRCLE in types:
  			for gesture in gestures:
  				circle = Leap.CircleGesture(gesture)
@@ -38,8 +35,13 @@ class playlist_listener(Leap.Listener):
 			num_fingers = len(frame.fingers.extended())
 			if num_fingers == 0:
 				return "play/pause"
+			if num_fingers == 2:
+				return "prev playlist"
+			if num_fingers == 3:
+				return "next playlist"
 			if num_fingers == 5:
 				return "mode change"
+		time.sleep(0.1)
 
 
 	def all_invalid(self, gestures):

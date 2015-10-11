@@ -14,6 +14,7 @@ class session():
 		self.logged_in = False
 		self.playlist = None
 		self.shuffledlist = None
+		self.playlists = None
 		self.track = None
 		self.shuffle_mode = False 
 		self.playlist_length = 0
@@ -25,7 +26,7 @@ class session():
 		password = "thisisnotmypasswordlol"
 		print "Logging in..."
 		self.session.login(username, password)
-		timeout = 100000
+		timeout = 20000000
 		time = 0
 		while self.session.connection.state is not spotify.ConnectionState.LOGGED_IN:
 			self.session.process_events()
@@ -43,21 +44,57 @@ class session():
 		if not self.logged_in:
 			print "Not logged in"
 			return
-		self.playlist = self.session.get_toplist(type=spotify.ToplistType.TRACKS, region='US')
+		self.playlists = self.session.playlist_container
+		self.playlists.load()
+		self.playlist = self.playlists[0]
 		self.playlist.load()
+		print "Current Playlist:", self.playlist.name
 		self.playlist_length = len(self.playlist.tracks)
 		copy = self.playlist.tracks[:]
 		random.shuffle(copy)
 		self.shuffledlist = copy
 		self.track = self.playlist.tracks[0]
-		action = self.listener.get_frame(self.controller)
+
+	def next_playlist(self):
+		self.playlist_length = len(self.playlist.tracks)
+		self.session.player.unload()
+		curr_index = self.playlists.index(self.playlist)
+		if curr_index < len(self.playlists) - 1:
+			self.playlist = self.playlists[curr_index+1]
+		else:
+			self.playlist = self.playlists[0]
+		self.playlist.load()
+		print "Current Playlist:", self.playlist.name
+		self.track = self.playlist.tracks[0]
+		self.track.load()
+		print self.track.name
+		self.session.player.load(self.track)
+		self.session.player.play()
+
+
+	def prev_playlist(self):
+		self.playlist_length = len(self.playlist.tracks)
+		self.session.player.unload()
+		curr_index = self.playlists.index(self.playlist)
+		if curr_index < len(self.playlists) - 1:
+			self.playlist = self.playlists[curr_index+1]
+		else:
+			self.playlist = self.playlists[0]
+		self.playlist.load()
+		print "Current Playlist:", self.playlist.name
+		self.track = self.playlist.tracks[0]
+		self.track.load()
+		print self.track.name
+		self.session.player.load(self.track)
+		self.session.player.play()
 
 	def mode_change(self):
 		self.shuffle_mode = not self.shuffle_mode
 		if self.shuffle_mode:
 			copy = self.playlist.tracks[:]
 			random.shuffle(copy)
-			self.shuffledlist = copy 			
+			self.shuffledlist = copy
+			self.track = self.shuffledlist[0]			
 			print "Playback: shuffle"
 		else:
 			print "Playback: normal"
@@ -66,13 +103,13 @@ class session():
 		next_available = True
 		if self.shuffle_mode:
 			curr_index = self.shuffledlist.index(self.track)
-			if curr_index < self.playlist_length:
+			if curr_index < self.playlist_length - 1:
 				self.track = self.shuffledlist[curr_index+1]
 			else:
 				next_available = False
 		else:
 			curr_index = self.playlist.tracks.index(self.track)
-			if curr_index < self.playlist_length:
+			if curr_index < self.playlist_length - 1:
 				self.track = self.playlist.tracks[curr_index+1]
 			else:
 				next_available = False
@@ -119,7 +156,7 @@ class session():
 		play = False
 		while action != "stop":
 			if action == "mode change":
-				time.sleep(1)
+				time.sleep(0.5)
 				self.mode_change()
 			if action == "play/pause":
 				time.sleep(0.5)
@@ -133,16 +170,24 @@ class session():
 			if action == "next":
 				self.session.player.unload()
 				print "next"
-				time.sleep(0.75)
+				time.sleep(0.5)
 				self.next()
 				play = True
 			if action == "prev":
 				print "prev"
-				time.sleep(0.75)
+				time.sleep(0.5)
 				self.previous()
 				play = True
+			if action == "next playlist":
+				time.sleep(0.4)
+				self.next_playlist()
+				play = True
+			if action == "prev playlist":
+				time.sleep(0.4)
+				self.prev_playlist()
+				play = True
 			action = self.listener.get_frame(self.controller)
-			time.sleep(0.3)
+			time.sleep(0.5)
 		print "stop"
 		self.session.player.unload()
 
