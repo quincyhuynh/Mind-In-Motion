@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import Tkinter
+# import Tkinter
 import spotify
 import sys
 
@@ -16,22 +16,80 @@ class Example(Frame):
         Frame.__init__(self, parent)   
          
         self.parent = parent
-        self.parent.title("Centered window")
+        # self.parent.title("Centered window")
         self.pack(fill=BOTH, expand=1)
-        self.centerWindow()
+        # self.centerWindow()
+        self.logIn()
         self.initUI()
+
+    def logIn(self):
+    	master = Tk()
+
+    	Label(master, text = "User: ").pack()
+    	e = Entry(master)
+    	e.pack()
+
+    	e.focus_set()
+
+    	Label(master, text = "Password").pack()
+    	d = Entry(master)
+    	d.pack()
+    	
+    	d.focus_set()
+
+    	# if TRUE:
+    	# 	return true
+    	# else:
+    	# 	print('login error')
+    	# 	return logIn()
+
+
+
+
+
+    	def callback():
+    		print e.get()
+    		print d.get()
+
+
+    	b = Button(master, text="Submit", width=10, command = callback)
+    	b.pack()
+
+    	master.mainloop()
+
+    	e = Entry(master, width=50)
+    	e.pack()
+
+    	text = e.get()
+
+    	def makeentry(parent, caption, width=None, **options):
+    		Label(parent, text=caption).pack(side=LEFT)
+    		entry = Entry(parent, **options)
+    		if width:
+    			entry.config(width=width)
+    		entry.pack(side=LEFT)
+    		return entry
+
+    	user = makeentry(parent, "Username: ", 10)
+    	password = makeentry(parent, "Password: ", 10, show="*")
+
+    	content = StringVar()
+    	entry = Entry(parent, text=caption, textvariable=content)
+    	text = content.get()
+    	content.set(text)
+
 
 
     def initUI(self):
-        # root = Tk()
-        # text = Text(root)
+        root = Tk()
+        text = Text(root)
 
         self.parent.title("Music In Motion")
 
 
-        img = ImageTk.PhotoImage(Image.open(""))
-        panel = tk.Label(root, image = img)
-        panel.pack(side = "bottom", fill = "both", expand = "yes")
+        # img = ImageTk.PhotoImage(Image.open(""))
+        # panel = tk.Label(root, image = img)
+        # panel.pack(side = "bottom", fill = "both", expand = "yes")
         # username = 'quinceftw'
         # token = util.prompt_for_user_token(username)
         # sp = spotipy.Spotify(auth=token)
@@ -39,16 +97,17 @@ class Example(Frame):
 
         
 
-        Label(self.parent, text = "MORE MUSIC").pack()
+        Label(self.parent, text = "Music Mode: ").pack()
         Label(self.parent, text = "Song: ").pack()
         Label(self.parent, text = "Artist(s): ").pack()
         Label(self.parent, text = "Album: ").pack()
         self.style = Style()
+        
         self.style.theme_use("default")
         t = Text(self.parent, x=10)
         t.insert(INSERT, "SONG TITLES")
         self.pack(fill=BOTH, expand=1)
-        img = track
+        # img = track
         # quitButton = Button(self, text="Quit", command=self.quit)
         # quitButton.place(x=50, y=50)
 
