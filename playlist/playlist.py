@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import os, sys, inspect, thread, time, play_wav, io, glob, getpass
-=======
 import os, sys, inspect, thread, time, play_wav, io, glob, spotify_session
->>>>>>> 9ecaaec70a1ad055579dd2ca4f30d864f6c9c9dd
 sys.path.append("../lib")
 sys.path.append("../lib/x64")
 
@@ -10,25 +6,41 @@ import Leap
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 class playlist_listener(Leap.Listener):
 	def on_connect(self, controller):
-		print "Connected"
 		controller.enable_gesture(Leap.Gesture.TYPE_SWIPE);
 		controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE);
 		controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP);
 		controller.enable_gesture(Leap.Gesture.TYPE_INVALID);
+		controller.config.set("Gesture.Swipe.MinLength", 60.0)
+		controller.config.set("Gesture.Swipe.MinVelocity", 250)
+		controller.config.save()
 
 	def get_frame(self, controller):
 		frame = controller.frame()
-		types = [i.type for i in frame.gestures()]
+		gestures = frame.gestures()
+		types = [i.type for i in gestures]
 		if len(frame.hands) == 0:
 			return None
-		# if Leap.Gesture.TYPE_KEY_TAP in types:
-		# 	return "shuffle"
-		if Leap.Gesture.TYPE_SWIPE in types:
-			return "play/pause"
+		# hand = frame.hands[0]
+		# speed = hand.palm_velocity.magnitude
+		# if Leap.Gesture.TYPE_SWIPE in types:
+		# 	return "mode change"
  		if Leap.Gesture.TYPE_CIRCLE in types:
-			return "shuffle"
+ 			for gesture in gestures:
+ 				circle = Leap.CircleGesture(gesture)
+				if (circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/2):
+				    return "next"
+				else:
+				    return "prev"
 		if len(frame.hands) == 2:
 			return "stop"
+		if len(frame.hands) == 1:
+			hand = frame.hands[0]
+			num_fingers = len(frame.fingers.extended())
+			if num_fingers == 0:
+				return "play/pause"
+			if num_fingers == 5:
+				return "mode change"
+
 
 	def all_invalid(self, gestures):
 		for i in gestures:
@@ -42,13 +54,9 @@ def main():
 	controller = Leap.Controller()
 
 	controller.add_listener(listener)
-<<<<<<< HEAD
-	new_session = session(listener, controller)
-=======
-
 	new_session = spotify_session.session(listener, controller)
->>>>>>> 9ecaaec70a1ad055579dd2ca4f30d864f6c9c9dd
 	new_session.login()
+	new_session.load_initial()
 	new_session.play_track()
 
 	controller.remove_listener(listener)

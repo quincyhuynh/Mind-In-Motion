@@ -12,4 +12,9 @@ print "Connected"
 toplist = session.get_toplist(type=spotify.ToplistType.TRACKS, region='US')
 toplist.load()
 random_track = random.choice(toplist.tracks)
-session
+random_track.load()
+print random_track.name
+session.player.load(random_track)
+session.player.play()
+
+
