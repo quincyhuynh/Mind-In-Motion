@@ -4,9 +4,15 @@
 import spotify
 import sys
 
+import PIL
+from PIL import *
+import ImageTk
+import os
+
 
 from Tkinter import *
 from ttk import Frame, Button, Style
+
 
 
 class Example(Frame):
@@ -17,44 +23,7 @@ class Example(Frame):
         self.parent = parent
         self.pack(fill=BOTH, expand=1)
         # self.centerWindow()
-
         self.initUI()
-        self.logIn()
-        
-
-
-    def logIn(self):
-
-    	Label(self.parent, text = "User: ").pack()
-    	e = Entry(self.parent)
-    	e.pack()
-
-    #     def callback():
-    #         print e.get()
-    #         print d.get()
-
-
-    #     b = Button(master, text="Submit", width=10, command = callback)
-    #     b.pack()
-
-    #     # master.mainloop()
-
-    #     e = Entry(master, width=50)
-    #     e.pack()
-
-    #     text = e.get()
-
-    #     def makeentry(parent, caption, width=None, **options):
-    #         Label(parent, text=caption).pack(side=LEFT)
-    #         entry = Entry(parent, **options)
-    #         if width:
-    #             entry.config(width=width)
-    #         entry.pack(side=LEFT)
-    #         return entry
-
-
-
-
 
 
     def initUI(self):
@@ -62,20 +31,6 @@ class Example(Frame):
         # text = Text(root)
         root = self.parent
         root.title("Music In Motion")
-
-
-
-        # Label(root, text = "User: ").pack()
-        # e = Entry(root)
-        # e.pack()
-
-        # e.focus_set()
-
-        # Label(root, text = "Password").pack()
-        # d = Entry(root)
-        # d.pack()
-        
-        # d.focus_set()
 
 
         def makeentry(parent, caption, width=None, **options):
@@ -86,32 +41,35 @@ class Example(Frame):
             entry.pack(side=LEFT)
             return entry        
 
+        def login(self):
+
+            # username = "quinceftw"
+            # password = "thisisnotmypasswordlol"
+            print "Logging in..."
+            self.session.login(username, password)
+            timeout = 20000000
+            time = 0
+            while self.session.connection.state is not spotify.ConnectionState.LOGGED_IN:
+                self.session.process_events()
+                if self.session.connection.state is spotify.ConnectionState.LOGGED_IN:
+                    self.logged_in = True
+                    print "Connected"
+                    return
+                time += 1
+                if time >= timeout:
+                    print "Connection Failed: Timeout. Try Again"
+                    break
+            self.login()
+
+
         def callback():
             print e.get()
             print d.get()
 
-
-       
-
-        # master.mainloop()
-
-        # def makeentry(parent, caption, width=None, **options):
-        #     Label(root, text=caption).pack(side=LEFT)
-        #     entry = Entry(root, **options)
-        #     if width:
-        #         entry.config(width=width)
-        #     entry.pack(side=LEFT)
-        #     return entry
-
         user = makeentry(root, "Username: ", 10)
         password = makeentry(root, "Password: ", 10, show="*")
         b = Button(root, text="Submit", width=10)
-        b.place(x=100, y=380)
-
-        # content = StringVar()
-        # entry = makeentry(root, text=caption, textvariable=content)
-        # text = content.get()
-        # content.set(text)
+        b.place(x=110, y=238)
 
 
 
@@ -119,11 +77,13 @@ class Example(Frame):
 
 
 
-
-        # img = ImageTk.PhotoImage(Image.open(""))
-        # panel = tk.Label(root, image = img)
+        img = ImageTk.PhotoImage(PIL.Image.open("thecircle.png"))
+        # img = img.resize((250, 250), Image.ANTIALIAS)
+        # self.pw.pic = ImageTk.PhotoImage(img)
+        panel = Label(root, image = img)
+        panel.image = img
         # panel.pack(side = "bottom", fill = "both", expand = "yes")
-
+        panel.place(x=100,y=20)
         # username = 'quinceftw'
         # token = util.prompt_for_user_token(username)
         # sp = spotipy.Spotify(auth=token)
@@ -162,8 +122,8 @@ def main():
   
     root = Tk()
     screen_width = str(root.winfo_screenwidth()//2)
-    screen_height = str(root.winfo_screenheight()//2)
-    screen_size = screen_width + "x" + screen_height + "+300+300"
+    screen_height = str(root.winfo_screenheight()//3)
+    screen_size = screen_width + "x" + screen_height + "+100+100"
     root.geometry(screen_size)
     ex = Example(root, screen_size)
     root.mainloop()  
