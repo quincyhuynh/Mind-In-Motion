@@ -4,9 +4,15 @@
 import spotify
 import sys
 
+import PIL
+from PIL import *
+import ImageTk
+import os
+
 
 from Tkinter import *
 from ttk import Frame, Button, Style
+
 
 
 class Example(Frame):
@@ -63,7 +69,7 @@ class Example(Frame):
         user = makeentry(root, "Username: ", 10)
         password = makeentry(root, "Password: ", 10, show="*")
         b = Button(root, text="Submit", width=10)
-        b.place(x=100, y=375)
+        b.place(x=110, y=238)
 
 
 
@@ -71,10 +77,13 @@ class Example(Frame):
 
 
 
-        # img = ImageTk.PhotoImage(Image.open(""))
-        # panel = tk.Label(root, image = img)
+        img = ImageTk.PhotoImage(PIL.Image.open("thecircle.png"))
+        # img = img.resize((250, 250), Image.ANTIALIAS)
+        # self.pw.pic = ImageTk.PhotoImage(img)
+        panel = Label(root, image = img)
+        panel.image = img
         # panel.pack(side = "bottom", fill = "both", expand = "yes")
-
+        panel.place(x=100,y=20)
         # username = 'quinceftw'
         # token = util.prompt_for_user_token(username)
         # sp = spotipy.Spotify(auth=token)
@@ -113,8 +122,8 @@ def main():
   
     root = Tk()
     screen_width = str(root.winfo_screenwidth()//2)
-    screen_height = str(root.winfo_screenheight()//2)
-    screen_size = screen_width + "x" + screen_height + "+300+300"
+    screen_height = str(root.winfo_screenheight()//3)
+    screen_size = screen_width + "x" + screen_height + "+100+100"
     root.geometry(screen_size)
     ex = Example(root, screen_size)
     root.mainloop()  
